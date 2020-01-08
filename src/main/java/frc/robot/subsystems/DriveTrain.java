@@ -27,7 +27,6 @@ public class DriveTrain {
 
         if(Constants.isDriveCAN){
             this.initCANMotors();
-            this.robotDrive = new DifferentialDrive(leftTalon, rightTalon);
         }else{
 
         }
@@ -44,8 +43,6 @@ public class DriveTrain {
 
         leftVictor.follow(leftTalon);
         rightVictor.follow(rightTalon);
-
-        
     }
 
     
