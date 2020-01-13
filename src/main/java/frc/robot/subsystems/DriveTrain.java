@@ -1,26 +1,26 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Constants;
 
 
 public class DriveTrain {
 
-    // private VictorSP leftDrive1;
-	// private VictorSP rightDrive1;
-	// private VictorSP leftDrive2;
-    // private VictorSP rightDrive2;
+    TalonFX leftMotor1;
+    TalonFX leftMotor2;
+    TalonFX rightMotor1;
+    TalonFX rightMotor2;
 
-    private VictorSPX leftVictor;
-	private VictorSPX rightVictor;
-	private TalonSRX leftTalon;
-    private TalonSRX rightTalon; 
-    
+    XboxController xbox;
+
     private DifferentialDrive robotDrive ;
 
     public DriveTrain(){
@@ -35,17 +35,26 @@ public class DriveTrain {
 
     }
 
-    private void initCANMotors(){
-        leftVictor = new VictorSPX(Constants.leftVictor);
-            leftTalon = new TalonSRX(Constants.leftTalon);
-            rightVictor = new VictorSPX(Constants.rightVictor);
-            rightTalon = new TalonSRX(Constants.rightTalon);
-
-        leftVictor.follow(leftTalon);
-        rightVictor.follow(rightTalon);
+    private void initCANMotors() {
+        this.leftMotor1 = new TalonFX(0);
+        this.leftMotor2 = new TalonFX(1);
+        this.rightMotor1 = new TalonFX(2);
+        this.rightMotor2 = new TalonFX(3);
+        this.leftMotor2.follow(leftMotor1);
+        this.rightMotor2.follow(rightMotor1);
     }
 
-    
+    public void arcadeDrive() {
 
+        double mult = 0.5;
+        if(xbox.getAButton()) {
+            mult = 1.0;
+        }
+        if(xbox.getBButton()) {
+            mult = 0.25;
+        }
+        this.leftMotor1.set(ControlMode.PercentOutput, mult*(xbox.getRawAxis(4)+xbox.getRawAxis(1)));
+        this.rightMotor1.set(ControlMode.PercentOutput, mult*(xbox.getRawAxis(4)-xbox.getRawAxis(1)));
+    }
 
 }
