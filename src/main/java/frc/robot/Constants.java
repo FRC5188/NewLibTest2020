@@ -9,5 +9,5 @@ public class Constants{
   public static final int rightTalon = 3;
 
 
-  public static final boolean isDriveCAN = true;
+  public static final boolean isDriveCAN = false;
 }

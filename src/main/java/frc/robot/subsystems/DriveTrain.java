@@ -3,15 +3,9 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Constants;
-
 
 public class DriveTrain {
 
@@ -19,21 +13,23 @@ public class DriveTrain {
     TalonFX leftMotor2;
     TalonFX rightMotor1;
     TalonFX rightMotor2;
+    VictorSP shooter1;
+    VictorSP shooter2;
 
     XboxController xbox;
-
-    private DifferentialDrive robotDrive ;
 
     public DriveTrain(){
 
         if(Constants.isDriveCAN){
             this.initCANMotors();
         }else{
-
+            this.initShooter();
         }
+    }
 
-        
-
+    private void initShooter() {
+        this.shooter1 = new VictorSP(0);
+        this.shooter2 = new VictorSP(1);
     }
 
     private void initCANMotors() {
@@ -52,8 +48,12 @@ public class DriveTrain {
         this.rightMotor2.follow(rightMotor1);
     }
 
-    public void arcadeDrive() {
+    public void shootme(){
+        this.shooter1.set(xbox.getRawAxis(4));
+        this.shooter2.set(xbox.getRawAxis(4));
+    }
 
+    public void arcadeDrive() {
         double mult = 0.5;
         if(xbox.getAButton()) {
             mult = 1.0;
